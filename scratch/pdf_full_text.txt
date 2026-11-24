@@ -1,0 +1,334 @@
+--- PAGE 1 ---
+AI & DATA SCIENCE DIPLOMA  ·  MACHINE LEARNING MODULE
+Machine Learning
+Capstone Project
+Telecom Customer Intelligence
+Supervised Learning  +  Unsupervised Learning  —  one project, one story
+Student Brief  ·  3 CSV files  ·  8 parts  ·  100 points
+
+--- PAGE 2 ---
+ML Capstone Project  ·  Telecom Customer Intelligence
+INSTANT  ·  AI & Data Science Diploma
+Page 2
+START HERE
+The story
+You have just joined the data team at Nile Connect, a mobile and home-internet operator in Egypt. The CEO
+has three worries and one question for you:
+  Too many customers are leaving. About 1 in 4 customers in our sample has left. Who is next?
+ Billing is a black box. Why does one customer pay 200 EGP and another 600 EGP?
+ One offer for everyone does not work. We send the same SMS to all customers. Who are our
+customers, really?
+ Our bundles are random. Which services do people buy together?
+Your job: use everything you learned in the Machine Learning module to answer these four questions with
+data, and write a short, clear recommendation the CEO can act on.
+Think like a data scientist, not like a student
+A model with a high score is not the goal. A decision the business can trust is the goal. In every part, ask yourself:
+"So what? What would we do differently on Monday morning?"
+What you will practice
+ Topic from the course
+Where you use it
+Linear Regression (one + multiple variables)
+Part 2 - predict the monthly bill
+R2, RMSE, MAE
+Part 2 - judge the bill models
+Logistic Regression, Decision Tree, SVM, KNN, Naive
+Bayes
+Part 3 - predict churn
+Ensemble Learning: Random Forest, XGBoost
+Part 3 + 4 - stronger churn models
+Accuracy, Precision, Recall, F1-Score
+Part 3 - judge churn models, pick the right metric
+Cross Validation, GridSearchCV, RandomizedSearchCV
+Part 4 - fair comparison and tuning
+Clustering: KMeans, HAC, DBSCAN
+Part 5 - find customer segments
+Dimensionality Reduction: PCA
+Part 5 - see and simplify the segments
+Association Rules: Apriori
+Part 6 - bundle recommendations
+Time: about 10-14 hours of work. Work alone or in pairs. Tools: Python, pandas, scikit-learn, xgboost, mlxtend, matplotlib /
+seaborn.
+
+--- PAGE 3 ---
+ML Capstone Project  ·  Telecom Customer Intelligence
+INSTANT  ·  AI & Data Science Diploma
+Page 3
+THE DATA
+Your three CSV files
+All three files describe the same company. They are not clean - just like real data. Do not trust a column until
+you have looked at it.
+1) customers.csv - 3,015 rows, 18 columns (used in Parts 1-4 and 7)
+ Column
+Meaning
+customer_id
+Unique ID (C00001...). An ID, not a feature.
+age, gender, governorate
+Who the customer is and where they live.
+tenure_months
+How many months the customer has been with us.
+contract_type, plan, payment_method,
+device_type
+How the customer buys and pays.
+has_home_internet
+Yes / No - also has our home internet.
+data_usage_gb, voice_minutes,
+sms_count
+Monthly usage.
+num_services, support_calls,
+late_payments
+Number of services, calls to support, late payments.
+monthly_bill_egp
+TARGET for Part 2 (regression). Monthly bill in EGP.
+churn
+TARGET for Parts 3-4 (classification). Yes = customer left.
+2) usage_behavior.csv - 2,000 rows, 13 columns (used in Part 5 and Part 7)
+Habits of the first 2,000 customers (same customer_id as above). There is no label. You must find the
+groups yourself.
+ Column
+Meaning
+avg_daily_data_mb, night_usage_pct
+Daily data use, and the share used at night.
+streaming_hours_week, social_media_hours_week,
+gaming_hours_week, video_call_hours_week
+Weekly hours by app type.
+calls_per_day, avg_call_minutes
+Voice habits.
+intl_calls_month, roaming_days_year
+International calls and travel.
+topups_per_month, app_count
+Top-ups and number of apps used.
+3) service_transactions.csv - 12,993 rows, 2 columns (used in Part 6)
+One row = one service in one basket. Columns: transaction_id (4,500 baskets) and service (13
+services, e.g. Home_Internet, Router_Upgrade, Roaming_Pack...). You must reshape it into a basket table
+before Apriori.
+A warning from experience
+Spend your first hour only on looking at the data. Most students jump to models in 10 minutes, then wonder why the
+results look strange. The dirt is there on purpose: there are at least six different problems hidden across the files.
+Part 1 asks you to find and list them.
+
+--- PAGE 4 ---
+ML Capstone Project  ·  Telecom Customer Intelligence
+INSTANT  ·  AI & Data Science Diploma
+Page 4
+PART 1 · 10 POINTS
+Know your data and clean it
+Files: customers.csv, usage_behavior.csv, service_transactions.csv
+ 1.1
+Load the three files. For each one print shape, data types, missing values per column and basic statistics.
+Write 3-5 lines on what you see.
+ 1.2
+Data audit. Make a small table: problem found | which file / column | how many rows | how you fixed it. Look
+for missing values, duplicate rows, impossible or extreme values, and text that is written in different ways.
+Hint: Check value_counts() of every text column. Look at the max of every number column.
+ 1.3
+Clean the data. Choose a different rule for each type of problem (drop, median, mode, cap, fix text) and
+explain why in one sentence each.
+ 1.4
+Explore. Draw at least 5 charts. Required: churn rate by contract_type, churn rate by tenure group, and a
+correlation heatmap of the numeric columns. Write one business sentence under each chart.
+ 1.5
+Look at the churn column. What percent of customers left? Why can this make accuracy a dangerous
+metric? Answer in 3 lines.
+Rule
+Every cleaning choice must be written down. Data leakage rule: fit anything that learns from data (median, scaler,
+encoder) on the training set only. For Part 1, simple cleaning before the split is fine; for Parts 3-4, use a Pipeline.
+PART 2 · 10 POINTS
+Predict the monthly bill (Regression)
+Target: monthly_bill_egp · File: customers.csv
+ 2.1
+One variable. Fit a Linear Regression with only data_usage_gb. Plot the points and the line. In plain
+words: what does the slope mean in EGP?
+ 2.2
+Multiple variables. Add more columns (usage, num_services, plan, has_home_internet...). Encode the text
+columns. Split 80/20 with random_state=42.
+ 2.3
+Report R2, RMSE and MAE on the test set for both models. Put them in one table.
+ 2.4
+Explain the three metrics to a non-technical manager in one sentence each. When would MAE be better
+than RMSE for this company?
+ 2.5
+Look at the coefficients. Which 3 features move the bill the most? Does the sign make business sense? Plot
+residuals - do you see a pattern?
+
+--- PAGE 5 ---
+ML Capstone Project  ·  Telecom Customer Intelligence
+INSTANT  ·  AI & Data Science Diploma
+Page 5
+PART 3 · 20 POINTS
+Who will leave? (Classification)
+Target: churn · File: customers.csv
+ 3.1
+Prepare the data: drop customer_id and the target from X, turn churn into 0/1, encode categories, split 80/20
+with stratify=y and random_state=42. Keep the test set untouched until Part 4 ends.
+ 3.2
+Train these 7 models: Logistic Regression, Decision Tree, SVM, KNN, Naive Bayes, Random Forest,
+XGBoost. Use default settings first.
+Hint: SVM, KNN and Logistic Regression need scaled data. Trees and XGBoost do not. Use a Pipeline so
+scaling is learned from training data only.
+ 3.3
+For each model report Accuracy, Precision, Recall and F1 for the churn class. Show them in one table,
+sorted by F1.
+ 3.4
+Draw the confusion matrix of the best 2 models. Explain in your own words: what is a False Negative here,
+and what is a False Positive? Which one costs the company more?
+ 3.5
+Business cost. Assume: losing a customer costs 1,500 EGP; a retention offer to one customer costs 200
+EGP. Using confusion matrices, calculate the money impact of the 3 best models. Is the best-F1 model also
+the best-money model?
+ 3.6
+Show feature importance from Random Forest and XGBoost. Do they agree? Write the top 5 reasons
+customers leave, in simple language.
+Lived-experience tip
+A model that says "nobody will churn" gets about 74% accuracy on this data - and is completely useless. Always
+compare against this dumb baseline before you celebrate any score.
+
+--- PAGE 6 ---
+ML Capstone Project  ·  Telecom Customer Intelligence
+INSTANT  ·  AI & Data Science Diploma
+Page 6
+PART 4 · 15 POINTS
+Fair comparison and tuning
+Cross Validation · GridSearchCV · RandomizedSearchCV
+ 4.1
+Use 5-fold Stratified Cross Validation on the training set for all 7 models. Report mean and standard
+deviation of F1. Which model is the most stable, not only the highest?
+ 4.2
+GridSearchCV on one model of your choice (Decision Tree or SVM are good). Define a grid of at least 3
+parameters, score with F1, cv=5. Show the best parameters and the best score.
+ 4.3
+RandomizedSearchCV on Random Forest or XGBoost with at least 5 parameters and n_iter of 30 or more.
+Measure the time it took.
+ 4.4
+Compare Grid and Randomized search: time, score, number of combinations tried. When would you pick
+each one in a real project?
+ 4.5
+Choose one final model. Evaluate it on the untouched test set one time only. Report all four metrics and
+compare with the cross-validation score. Are they close? If not, what could be wrong?
+ 4.6
+Bonus idea (not required): try class_weight='balanced' or a different decision threshold (for example 0.35
+instead of 0.5). Does recall improve? What do you lose?
+Common mistake
+Tuning on the test set. If you check the test score, change something, and check again, the test set is no longer a
+test. It becomes part of training and your final number is too optimistic.
+
+--- PAGE 7 ---
+ML Capstone Project  ·  Telecom Customer Intelligence
+INSTANT  ·  AI & Data Science Diploma
+Page 7
+PART 5 · 20 POINTS
+Find the hidden customer segments (Clustering +
+PCA)
+File: usage_behavior.csv · no labels
+ 5.1
+Prepare: drop customer_id, handle missing values, and scale all features with StandardScaler. Write one
+sentence: why must we scale before KMeans, HAC and DBSCAN?
+ 5.2
+KMeans. Try k from 2 to 8. Plot the elbow curve and the silhouette score. Choose k and defend your choice.
+Then profile each cluster (mean of each feature).
+ 5.3
+HAC. Draw a dendrogram (use Ward linkage first). Cut it into the same number of clusters. Try at least one
+other linkage (average or complete). Do the groups match KMeans?
+ 5.4
+DBSCAN. Choose eps with a k-distance plot and justify min_samples. How many clusters and how many
+noise points do you get? Look at the noise points: who are these customers?
+Hint: If you get one giant cluster or 100% noise, your eps is wrong. Try again with the plot.
+ 5.5
+PCA. Fit PCA on the scaled data. Plot explained variance (cumulative). How many components keep about
+90% of the information? Draw a 2D scatter plot colored by your best clustering.
+ 5.6
+Run KMeans again on the PCA output (the components you kept). Do you get the same segments? What
+did you gain and what did you lose?
+ 5.7
+Name your segments. Give each cluster a business name (for example "Night Gamers") and write 2 lines
+on what offer fits each one.
+
+--- PAGE 8 ---
+ML Capstone Project  ·  Telecom Customer Intelligence
+INSTANT  ·  AI & Data Science Diploma
+Page 8
+PART 6 · 10 POINTS
+Which services go together? (Association Rules)
+File: service_transactions.csv
+ 6.1
+Reshape the file into a basket table: one row per transaction, one True/False column per service.
+Hint: pd.crosstab or groupby + unstack. mlxtend wants True/False values, not 0/1 with a wrong type.
+ 6.2
+Which 5 services are the most popular? Plot their support.
+ 6.3
+Run Apriori with min_support around 0.03. Then build rules with min_confidence 0.5. Show the table sorted
+by lift.
+ 6.4
+Explain Support, Confidence and Lift with one real rule from your table. Why is a rule with high confidence
+but lift near 1 not interesting?
+ 6.5
+Pick the 3 best rules. For each one, write a concrete offer (for example: "Customers who buy X get a
+discount on Y") and who it should be sent to.
+PART 7 · 5 POINTS
+Put the two worlds together
+Supervised + Unsupervised
+ 7.1
+Add the segment from Part 5 to customers.csv (use customer_id; only the first 2,000 customers have one).
+Show the churn rate per segment. Which segment is most at risk?
+ 7.2
+On those 2,000 customers, add the segment as a feature to your churn model. Does the score improve?
+Write an honest answer. A "no" is a fine answer if you can explain it.
+
+--- PAGE 9 ---
+ML Capstone Project  ·  Telecom Customer Intelligence
+INSTANT  ·  AI & Data Science Diploma
+Page 9
+PART 8 · 10 POINTS
+Tell the story (Final report)
+Written for the CEO, not for a data scientist
+ 8.1
+Write a one-to-two page summary with four headings that match the CEO's four worries: Churn, Billing,
+Segments, Bundles. Each section: the finding, the number that proves it, and the action you recommend.
+ 8.2
+Add a short "Limits and next steps" box: what is missing in this data, and what would you collect next?
+What to submit
+  One Jupyter notebook (.ipynb) that runs from top to bottom without errors. Use markdown cells with
+headings Part 1 ... Part 8.
+ The report as PDF or a short slide deck (2 pages or 5 slides).
+ Use random_state=42 everywhere so your results can be repeated.
+ Name the files: Name_ML_Capstone.ipynb and Name_ML_Capstone_Report.pdf.
+Grading
+ Part
+What we look for
+Points
+1 Data audit
+Found the real problems, sensible fixes, clear reasons
+10
+2 Regression
+Correct models and metrics, honest reading of coefficients
+10
+3 Classification
+7 models, right metrics, business cost thinking
+20
+4 CV and tuning
+No leakage, fair comparison, test set used once
+15
+5 Clustering + PCA
+Scaling, justified k / eps, named segments
+20
+6 Apriori
+Correct basket table, rules read with lift, real offers
+10
+7 Combine
+Segment-level churn, honest result
+5
+8 Report + code
+Clear story for the CEO, clean and readable notebook
+10
+Total
+100
+Before you submit - checklist
+  Did you compare every model with the "nobody churns" baseline?
+ Did you fit scalers, encoders and imputers only on training data?
+ Did you scale the data before KMeans, HAC and DBSCAN?
+ Did you remove customer_id from the features?
+ Did you touch the test set only once?
+ Does every chart have a title, labeled axes and one sentence of meaning?
+ Does your notebook run from top to bottom after "Restart and Run All"?
+Last word
+There is no single perfect answer here. Two students can choose different models and different k and both get full
+marks, if they can explain their choices with evidence. Show your thinking.

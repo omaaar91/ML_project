@@ -1,0 +1,23 @@
+artifact_path: file:///E:/tik tok/ML_project/Notebooks/mlruns/1/models/m-fa6e0da58aae4d8f903c8244b55e5cdc/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.11.0
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+mlflow_version: 3.18.0
+model_id: m-fa6e0da58aae4d8f903c8244b55e5cdc
+model_size_bytes: 148689
+model_uuid: m-fa6e0da58aae4d8f903c8244b55e5cdc
+prompts: null
+run_id: 2c2d527afdfb4edebd56d632815e649d
+utc_time_created: '2026-11-21 23:55:09.591920'
